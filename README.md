@@ -38,9 +38,11 @@ A console-based Contact Book System built with Python. This project demonstrates
 Contact-Book-System/
 │
 ├── Contact Book System.py
-├── contacts.json
+├── .gitignore
 └── README.md
 ```
+
+> Note: `contacts.json` is created automatically when the program runs and stores your contact data locally. It is excluded from the repository via `.gitignore` since it holds runtime/test data rather than source code.
 
 ## How to Run
 
