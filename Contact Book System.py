@@ -3,33 +3,26 @@
 # Language: Python
 # Level: Beginner
 
+import json 
+import os 
+import sys
+
 print ("============ Welcome to Contact Book System =============")
 
-# ---------------- Contact Book System List ----------------
-contacts = [
-    {"Contact ID": 101, "Name": "Ali", "Phone": "03001234567", "Email": "ali@example.com", "City": "Karachi"},
-    {"Contact ID": 102, "Name": "Ahmed", "Phone": "03011234567", "Email": "ahmed@example.com", "City": "Lahore"},
-    {"Contact ID": 103, "Name": "Usman", "Phone": "03021234567", "Email": "usman@example.com", "City": "Islamabad"},
-    {"Contact ID": 104, "Name": "Hassan", "Phone": "03031234567", "Email": "hassan@example.com", "City": "Peshawar"},
-    {"Contact ID": 105, "Name": "Bilal", "Phone": "03041234567", "Email": "bilal@example.com", "City": "Quetta"},
-    {"Contact ID": 106, "Name": "Hamza", "Phone": "03051234567", "Email": "hamza@example.com", "City": "Multan"},
-    {"Contact ID": 107, "Name": "Ayesha", "Phone": "03061234567", "Email": "ayesha@example.com", "City": "Faisalabad"},
-    {"Contact ID": 108, "Name": "Fatima", "Phone": "03071234567", "Email": "fatima@example.com", "City": "Hyderabad"},
-    {"Contact ID": 109, "Name": "Zain", "Phone": "03081234567", "Email": "zain@example.com", "City": "Sialkot"},
-    {"Contact ID": 110, "Name": "Maryam", "Phone": "03091234567", "Email": "maryam@example.com", "City": "Gujranwala"},
-    {"Contact ID": 111, "Name": "Saad", "Phone": "03101234567", "Email": "saad@example.com", "City": "Rawalpindi"},
-    {"Contact ID": 112, "Name": "Noor", "Phone": "03111234567", "Email": "noor@example.com", "City": "Bahawalpur"},
-    {"Contact ID": 113, "Name": "Abdullah", "Phone": "03121234567", "Email": "abdullah@example.com", "City": "Sukkur"},
-    {"Contact ID": 114, "Name": "Umer", "Phone": "03131234567", "Email": "umer@example.com", "City": "Larkana"},
-    {"Contact ID": 115, "Name": "Sana", "Phone": "03141234567", "Email": "sana@example.com", "City": "Mardan"},
-    {"Contact ID": 116, "Name": "Hina", "Phone": "03151234567", "Email": "hina@example.com", "City": "Abbottabad"},
-    {"Contact ID": 117, "Name": "Shahzaib", "Phone": "03161234567", "Email": "shahzaib@example.com", "City": "Mirpur"},
-    {"Contact ID": 118, "Name": "Laiba", "Phone": "03171234567", "Email": "laiba@example.com", "City": "Gwadar"},
-    {"Contact ID": 119, "Name": "Areeb", "Phone": "03181234567", "Email": "areeb@example.com", "City": "Kasur"},
-    {"Contact ID": 120, "Name": "Iqra", "Phone": "03191234567", "Email": "iqra@example.com", "City": "Sahiwal"}
-]
+def load_contacts():
+    if os.path.exists("contacts.json"):
+        with open("contacts.json", "r") as file:
+            data = json.load(file)   # yaha 'load' hai, 'dump' nahi
+        return data
+    else:
+        return []
+
+contacts = load_contacts()
 
 # ----------------Functions for Contact Book System----------------
+def save_contacts():
+    with open("contacts.json", "w") as file:
+        json.dump(contacts, file, indent=4)
 
 def display_contact(contact):
     print("-" * 50)
@@ -71,14 +64,10 @@ def add_contact():
         print("City cannot be empty!")
         return
     
-    try:
-        Phone = int(input("Enter the Phone Number: "))
-        if Phone <= 0:
-            print("Phone number cannot be a negative number or zero!")
-            return
-    except ValueError:
-        print("Invalid Phone Number! Please enter a valid Phone Number.")
-        return  
+    Phone = (input("Enter the Phone Number: "))
+    if not Phone.isdigit():
+        print("Invalid Phone Number! Please enter digits only.")
+        return
 
     Name = Name.strip()
     City = City.strip()
@@ -92,6 +81,7 @@ def add_contact():
     }
 
     contacts.append(new_contact)
+    save_contacts()
     print("New Contact Added Successfully!")
 
 def view_contacts():
@@ -177,6 +167,7 @@ def update_contact():
                 except ValueError:
                     print("Invalid Phone Number! Keeping current phone number.")
             print("Contact Updated Successfully!")
+            save_contacts()
             found = True
             break
     if not found:
@@ -198,6 +189,7 @@ def delete_contact():
                 return
             contacts.remove(contact)
             print("Contact Deleted Successfully!")
+            save_contacts()
             found = True
             break
     if not found:
@@ -208,7 +200,6 @@ def exit_system():
     print("Exiting the Contact Book System.")
     print("Thank you for using the system. Goodbye!")
     print("---------------------------------------------------")
-    import sys
     sys.exit()
 
 while True:
